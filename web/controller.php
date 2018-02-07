@@ -103,9 +103,14 @@ switch ($operacion){
 			$articulo = $daoArticulo->articuloId($idArticulo);
 
 			$idCompra = $daoCompra->registerCompra($idProveedor,$articulo->getPrecio(),$cantidad);
+
+			$stock = $articulo->getStock()+$cantidad;
+			$daoArticulo->updateArticulo($idArticulo,$stock);
+
 			if($daoDetalleCompra->registerDetalleCompra($idCompra,$articulo->getIdArticulos(),$cantidad,$articulo->getPrecio())){
 				$_SESSION['listaCompras'] = $daoCompra->listaCompras();
 				$_SESSION['listaDetalleCompra'] = $daoDetalleCompra->listaDetalleCompra();
+				$_SESSION['listaArticulos'] = $daoArticulo->listaArticulos();
 				header('Location: home.php');
 			}else{
 				header('Location: error.php');
@@ -152,10 +157,13 @@ switch ($operacion){
 			$compra->setTotal($precioTotal);
 
 
+			$stock = $articulo->getStock()+$cantidad;
 			$daoCompra->updateCompra($compra);
+			$daoArticulo->updateArticulo($idArticulo,$stock);
 			if($daoDetalleCompra->registerDetalleCompra($idCompra,$idArticulo,$cantidad,$articulo->getPrecio())){
 				$_SESSION['listaCompras'] = $daoCompra->listaCompras();
 				$_SESSION['listaDetalleCompra'] = $daoDetalleCompra->listaDetalleCompra();
+				$_SESSION['listaArticulos'] = $daoArticulo->listaArticulos();
 				header('Location: home.php');
 			}else{
 				header('Location: error.php');

@@ -103,4 +103,25 @@ class DAOArticulo {
 
 		return $articulo;
 	}
+
+	public function updateArticulo($idArticulo, $stock){
+		$conexion = new Conexion();
+		$objPDO = $conexion->getPDO();
+
+
+		$sql= "UPDATE articulos SET stock = $stock WHERE idarticulo = $idArticulo";
+
+		$statement = $objPDO->prepare($sql);
+
+		try{
+			$statement->execute();
+		}catch (PDOException $e){
+			trhow($e);
+			$_SESSION['erromysql'] = $statement->errorInfo();
+			header('Location: web/error.php');
+		}finally{
+			$statement=NULL;
+			$objPDO=NULL;
+		}
+	}
 }

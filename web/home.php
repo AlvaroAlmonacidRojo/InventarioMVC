@@ -114,6 +114,7 @@ session_start();
         <th>Descripcion</th>
         <th>Categoria</th>
         <th>Precio</th>
+        <th>Stock</th>
     </tr>
 	<?php
 	$listaArticulos = $_SESSION['listaArticulos'];
@@ -127,6 +128,7 @@ session_start();
             <td><?php echo $articulo->getDescripcion();?></td>
             <td><?php echo $categoria->getDescripcion();?></td>
             <td><?php echo $articulo->getPrecio();?></td>
+            <td><?php echo $articulo->getStock();?></td>
         </tr>
 		<?php
 	}

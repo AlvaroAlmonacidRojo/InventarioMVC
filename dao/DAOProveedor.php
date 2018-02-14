@@ -97,4 +97,34 @@ class DAOProveedor {
 
 		return true;
 	}
+
+	public function deleteProveedor($idProveedor){
+
+		$conexion = new Conexion();
+		$objPDO = $conexion->getPDO();
+
+		$sql= "DELETE FROM proveedores WHERE idproveedor = $idProveedor";
+
+		$statement = $objPDO->prepare($sql);
+
+		try{
+			$statement->execute();
+
+
+			if($statement->rowCount()>0){
+				return true;
+			}else{
+				return false;
+			}
+
+		}catch (PDOException $e){
+			throw($e);
+			$_SESSION['erromysql'] = $statement->errorInfo();
+			header('Location: web/error.php');
+		}finally{
+			$statement=NULL;
+			$objPDO=NULL;
+		}
+
+	}
 }

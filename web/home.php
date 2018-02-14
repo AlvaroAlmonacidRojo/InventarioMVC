@@ -14,6 +14,7 @@ require_once '../dao/DAOArticulo.php';
 require_once '../dao/DAOCategoria.php';
 require_once '../dao/DAOCompra.php';
 require_once '../dao/DAOProveedor.php';
+require_once '../dao/DAODetalleCompra.php';
 session_start();
 ?>
 <!doctype html>
@@ -115,10 +116,12 @@ session_start();
         <th>Categoria</th>
         <th>Precio</th>
         <th>Stock</th>
+        <th>Borrado</th>
     </tr>
 	<?php
 	$listaArticulos = $_SESSION['listaArticulos'];
 
+	$daoDetalleCompra = new DAODetalleCompra();
 	$daoCategorias = new DAOCategoria();
 	foreach ($listaArticulos as $articulo){
 
@@ -129,6 +132,8 @@ session_start();
             <td><?php echo $categoria->getDescripcion();?></td>
             <td><?php echo $articulo->getPrecio();?></td>
             <td><?php echo $articulo->getStock();?></td>
+            <td><?php if(!$daoDetalleCompra->isArticulo($articulo->getIdArticulos())){ echo "<a href='controller.php?operacion=borrarArticulo&id=".$articulo->getIdArticulos()."' class='btn btn-danger'>Borrar</a>";}?></td>
+
         </tr>
 		<?php
 	}
@@ -146,16 +151,20 @@ session_start();
                     <tr>
                         <th>ID</th>
                         <th>Descripción</th>
+                        <th>Borrado</th>
 
                     </tr>
 				    <?php
 				    $listaCategorias = $_SESSION['listaCategorias'];
+				    $daoArticulo = new DAOArticulo();
 				    foreach ($listaCategorias as $categoria){
 
 					    ?>
                         <tr>
                             <td><?php echo $categoria->getIdCategoria();?></td>
                             <td><?php echo $categoria->getDescripcion();?></td>
+                            <td><?php if(!$daoArticulo->isCategoria($categoria->getIdCategoria())){ echo "<a href='controller.php?operacion=borrarCategoria&id=".$categoria->getIdCategoria()."' class='btn btn-danger'>Borrar</a>";}?></td>
+
                         </tr>
 					    <?php
 				    }
@@ -174,10 +183,12 @@ session_start();
                         <th>ID</th>
                         <th>Razon Social</th>
                         <th>Teléfono</th>
+                        <th>Borrado</th>
 
                     </tr>
 				    <?php
 				    $listaProveedores = $_SESSION['listaProveedores'];
+				    $daoCompra = new DAOCompra();
 				    foreach ($listaProveedores as $proveedor){
 
 					    ?>
@@ -185,6 +196,7 @@ session_start();
                             <td><?php echo $proveedor->getIdProveedor();?></td>
                             <td><?php echo $proveedor->getRazonSocial();?></td>
                             <td><?php echo $proveedor->getTelefono();?></td>
+                            <td><?php if(!$daoCompra->isProveedor($proveedor->getIdProveedor())){ echo "<a href='controller.php?operacion=borrarProveedor&id=".$proveedor->getIdProveedor()."' class='btn btn-danger'>Borrar</a>";}?></td>
                         </tr>
 					    <?php
 				    }
@@ -321,7 +333,6 @@ session_start();
         <th>IDCompra</th>
         <th>Articulo</th>
         <th>Cantidad</th>
-        <th>Precio</th>
     </tr>
 	<?php
 	$listaDetalleCompra = $_SESSION['listaDetalleCompra'];
@@ -338,7 +349,6 @@ session_start();
             <td><?php echo $detalleCompra->getIdCompra();?></td>
             <td><?php echo $articulo->getDescripcion();?></td>
             <td><?php echo $detalleCompra->getCantidad();?></td>
-            <td><?php echo $detalleCompra->getPrecio();?></td>
         </tr>
 		<?php
 	}

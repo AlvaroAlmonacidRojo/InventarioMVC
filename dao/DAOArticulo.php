@@ -124,4 +124,62 @@ class DAOArticulo {
 			$objPDO=NULL;
 		}
 	}
+
+	public function isCategoria($idCategoria){
+		$conexion = new Conexion();
+		$objPDO = $conexion->getPDO();
+
+
+		$sql= "SELECT * FROM articulos WHERE idcategoria = $idCategoria";
+
+		$statement = $objPDO->prepare($sql);
+
+		try{
+			$statement->execute();
+			$fila= $statement->fetch(PDO::FETCH_ASSOC);
+			if($fila){
+				return true;
+			}else{
+				return false;
+			}
+
+		}catch (PDOException $e){
+			trhow($e);
+			$_SESSION['erromysql'] = $statement->errorInfo();
+			header('Location: web/error.php');
+		}finally{
+			$statement=NULL;
+			$objPDO=NULL;
+		}
+	}
+
+	public function deleteArticulo($idArticulo){
+
+		$conexion = new Conexion();
+		$objPDO = $conexion->getPDO();
+
+		$sql= "DELETE FROM articulos WHERE idarticulo = $idArticulo";
+
+		$statement = $objPDO->prepare($sql);
+
+		try{
+			$statement->execute();
+
+
+			if($statement->rowCount()>0){
+				return true;
+			}else{
+				return false;
+			}
+
+		}catch (PDOException $e){
+			throw($e);
+			$_SESSION['erromysql'] = $statement->errorInfo();
+			header('Location: web/error.php');
+		}finally{
+			$statement=NULL;
+			$objPDO=NULL;
+		}
+
+	}
 }

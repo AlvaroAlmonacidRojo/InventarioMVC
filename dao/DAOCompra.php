@@ -107,6 +107,8 @@ class DAOCompra {
 
 		try{
 			$statement->execute();
+			$fila= $statement->fetch(PDO::FETCH_ASSOC);
+			$precioTotal= $fila['total'];
 		}catch (PDOException $e){
 			trhow($e);
 			$_SESSION['erromysql'] = $statement->errorInfo();
@@ -116,5 +118,33 @@ class DAOCompra {
 			$objPDO=NULL;
 		}
 
+	}
+
+	public function isProveedor($idProveedor){
+		$conexion = new Conexion();
+		$objPDO = $conexion->getPDO();
+
+
+		$sql= "SELECT * FROM compras WHERE idproveedor = $idProveedor";
+
+		$statement = $objPDO->prepare($sql);
+
+		try{
+			$statement->execute();
+			$fila= $statement->fetch(PDO::FETCH_ASSOC);
+			if($fila){
+				return true;
+			}else{
+				return false;
+			}
+
+		}catch (PDOException $e){
+			trhow($e);
+			$_SESSION['erromysql'] = $statement->errorInfo();
+			header('Location: web/error.php');
+		}finally{
+			$statement=NULL;
+			$objPDO=NULL;
+		}
 	}
 }

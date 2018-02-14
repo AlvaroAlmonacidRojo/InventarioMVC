@@ -177,5 +177,74 @@ switch ($operacion){
 
 
 		break;
+
+	case "borrarProveedor":
+		$idProveedor = $_GET['id'];
+
+		try{
+
+
+			if($daoProveedor->deleteProveedor($idProveedor)){
+				$_SESSION['listaProveedores'] = $daoProveedor->listaProveedores();
+				header('Location: home.php');
+
+			}else{
+				header('Location: error.php');
+			}
+
+		}catch (PDOException $e){
+			throw ($e);
+		}
+
+
+
+
+		break;
+
+	case "borrarCategoria":
+		$idCategoria = $_GET['id'];
+
+		try{
+
+
+			if($daoCategoria->deleteCategoria($idCategoria)){
+				$_SESSION['listaCategorias'] = $daoCategoria->listaCategorias();
+				header('Location: home.php');
+
+			}else{
+				header('Location: error.php');
+			}
+
+		}catch (PDOException $e){
+			throw ($e);
+		}
+
+
+
+
+		break;
+
+	case "borrarArticulo":
+		$idArticulo = $_GET['id'];
+
+		try{
+
+
+			if($daoArticulo->deleteArticulo($idArticulo)){
+				$_SESSION['listaArticulos'] = $daoArticulo->listaArticulos();
+				header('Location: home.php');
+
+			}else{
+				header('Location: error.php');
+			}
+
+		}catch (PDOException $e){
+			throw ($e);
+		}
+
+
+
+
+		break;
 }
 ?>

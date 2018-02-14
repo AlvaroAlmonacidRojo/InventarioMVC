@@ -99,6 +99,35 @@ class DAOCategoria {
 		return $categoria;
 	}
 
+	public function deleteCategoria($idCategoria){
+
+		$conexion = new Conexion();
+		$objPDO = $conexion->getPDO();
+
+		$sql= "DELETE FROM categorias WHERE idcategoria = $idCategoria";
+
+		$statement = $objPDO->prepare($sql);
+
+		try{
+			$statement->execute();
+
+
+			if($statement->rowCount()>0){
+				return true;
+			}else{
+				return false;
+			}
+
+		}catch (PDOException $e){
+			throw($e);
+			$_SESSION['erromysql'] = $statement->errorInfo();
+			header('Location: web/error.php');
+		}finally{
+			$statement=NULL;
+			$objPDO=NULL;
+		}
+
+	}
 
 }
 ?>
